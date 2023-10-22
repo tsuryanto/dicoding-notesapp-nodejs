@@ -1,0 +1,359 @@
+{
+	"info": {
+		"_postman_id": "4ba7490e-3887-4141-96df-d53c4494c278",
+		"name": "dicoding-notesapp-nodejs TEST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30668250"
+	},
+	"item": [
+		{
+			"name": "add note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response code should 201', () => {",
+							"    pm.response.to.have.status(201)",
+							"})",
+							"",
+							"pm.test('response content-type should application/json', () => {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eq('application/json; charset=utf-8')",
+							"})",
+							"",
+							"pm.test('response body should be an object', () => {",
+							"    const resp = pm.response.json()",
+							"    pm.expect(resp).to.be.an('object')",
+							"})",
+							"",
+							"pm.test('response body should have correct property and value', () => {",
+							"    const resp = pm.response.json()",
+							"",
+							"    pm.expect(resp).to.ownProperty('status')",
+							"    pm.expect(resp.status).to.equals('success')",
+							"    pm.expect(resp).to.ownProperty('message')",
+							"    pm.expect(resp.message).to.equals('Catatan berhasil ditambahkan')",
+							"    pm.expect(resp).to.ownProperty('data')",
+							"    pm.expect(resp.data).to.be.an('object')",
+							"})",
+							"",
+							"pm.test('response body data should have noteid property and not eq to empty', () => {",
+							"    const resp = pm.response.json()",
+							"    const { data } = resp   ",
+							"",
+							"    pm.expect(data).to.ownProperty('noteid')",
+							"    pm.expect(data.noteid).to.not.equals('') ",
+							"",
+							"    pm.environment.set(\"noteid\", data.noteid);",
+							"})",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Catatan A\",\n    \"tags\": [\"Android\", \"Web\"],\n    \"body\": \"Isi dari catatan A\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/notes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"notes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list notes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response code should 200', () => {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test('response content-type should application/json', () => {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eq('application/json; charset=utf-8')",
+							"})",
+							"",
+							"pm.test('response body should be an object', () => {",
+							"    const resp = pm.response.json()",
+							"    pm.expect(resp).to.be.an('object')",
+							"})",
+							"",
+							"pm.test('response body should have correct property and value', () => {",
+							"    const resp = pm.response.json()",
+							"",
+							"    pm.expect(resp).to.ownProperty('status')",
+							"    pm.expect(resp.status).to.equals('success')",
+							"    pm.expect(resp).to.ownProperty('data')",
+							"    pm.expect(resp.data).to.be.an('object')",
+							"})",
+							"",
+							"pm.test('response body data should have a notes array and contins at least 1 item', () => {",
+							"    const resp = pm.response.json()",
+							"    const { data } = resp   ",
+							"",
+							"    pm.expect(data).to.ownProperty('notes')",
+							"    pm.expect(data.notes).lengthOf.at.least(1);",
+							"})",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/notes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"notes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response code should 200', () => {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test('response content-type should application/json', () => {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eq('application/json; charset=utf-8')",
+							"})",
+							"",
+							"pm.test('response body should be an object', () => {",
+							"    const resp = pm.response.json()",
+							"    pm.expect(resp).to.be.an('object')",
+							"})",
+							"",
+							"pm.test('response body should have correct property and value', () => {",
+							"    const resp = pm.response.json()",
+							"",
+							"    pm.expect(resp).to.ownProperty('status')",
+							"    pm.expect(resp.status).to.equals('success')",
+							"    pm.expect(resp).to.ownProperty('data')",
+							"    pm.expect(resp.data).to.be.an('object')",
+							"})",
+							"",
+							"",
+							"pm.test('response body data should contain note object', () => {",
+							"    const resp = pm.response.json()",
+							"    const { data } = resp   ",
+							"",
+							"    pm.expect(data).to.ownProperty('note')",
+							"    pm.expect(data.note).to.be.an('object')",
+							"})",
+							"",
+							"pm.test('note object should contain correct value for id, title, body, and tags property', () => {",
+							"   const responseJson = pm.response.json();",
+							"   const { data: { note } } = responseJson;",
+							"   const expectedId = pm.environment.get('noteid');",
+							"   const expectedTitle = 'Catatan A';",
+							"   const expectedTags = ['Android', 'Web'];",
+							"   const expectedBody = 'Isi dari catatan A';",
+							"   pm.expect(note).to.have.ownProperty('id');",
+							"   pm.expect(note.id).to.equals(expectedId);",
+							"   pm.expect(note).to.have.ownProperty('title');",
+							"   pm.expect(note.title).to.equals(expectedTitle);",
+							"   pm.expect(note).to.have.ownProperty('tags');",
+							"   pm.expect(note.tags).to.eql(expectedTags);",
+							"   pm.expect(note).to.have.ownProperty('body');",
+							"   pm.expect(note.body).to.equals(expectedBody);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/notes/{{noteid}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"notes",
+						"{{noteid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response code should 200', () => {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test('response content-type should application/json', () => {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eq('application/json; charset=utf-8')",
+							"})",
+							"",
+							"pm.test('response body should be an object', () => {",
+							"    const resp = pm.response.json()",
+							"    pm.expect(resp).to.be.an('object')",
+							"})",
+							"",
+							"pm.test('response body should have correct property and value', () => {",
+							"    const resp = pm.response.json()",
+							"",
+							"    pm.expect(resp).to.ownProperty('status')",
+							"    pm.expect(resp.status).to.equals('success')",
+							"    pm.expect(resp).to.ownProperty('message')",
+							"    pm.expect(resp.message).to.equals('Catatan berhasil diperbarui')",
+							"})",
+							"",
+							"pm.test('when request the updated note', () => {",
+							"   const noteId = pm.environment.get('noteId');",
+							"});",
+							"",
+							"pm.test('when request the updated note', () => {",
+							"   const noteId = pm.environment.get('noteid');",
+							"   const baseUrl = pm.environment.get('base_url');",
+							"   pm.sendRequest(`${baseUrl}/notes/${noteId}`, (error, response) => {",
+							"        if(!error) {",
+							"            pm.test('then the updated note should contain the latest data', () => {",
+							"                const responseJson = response.json();",
+							"                const { data: { note } } = responseJson;",
+							"",
+							"                const expectedTitle = 'Catatan B';",
+							"                const expectedTags = [\"Android\", \"Web\", \"IOS\"];",
+							"                const expectedBody = \"Isi dari catatan B\";     ",
+							"",
+							"                pm.expect(note.title).to.equals(expectedTitle);",
+							"                pm.expect(note.tags).to.eql(expectedTags);",
+							"                pm.expect(note.body).to.equals(expectedBody);                           ",
+							"            });",
+							"        }   ",
+							"   });",
+							"}); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Catatan B\",\n    \"tags\": [\"Android\", \"Web\", \"IOS\"],\n    \"body\": \"Isi dari catatan B\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/notes/{{noteid}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"notes",
+						"{{noteid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response code should 200', () => {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test('response content-type should application/json', () => {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eq('application/json; charset=utf-8')",
+							"})",
+							"",
+							"pm.test('response body should be an object', () => {",
+							"    const resp = pm.response.json()",
+							"    pm.expect(resp).to.be.an('object')",
+							"})",
+							"",
+							"pm.test('response body should have correct property and value', () => {",
+							"   const resp = pm.response.json()",
+							"",
+							"   pm.expect(resp).to.have.ownProperty('status');",
+							"   pm.expect(resp.status).to.equals('success');",
+							"   pm.expect(resp).to.have.ownProperty('message');",
+							"   pm.expect(resp.message).to.equals('Catatan berhasil dihapus');",
+							"})",
+							"",
+							"pm.test('when request the deleted note', () => {",
+							"   const noteId = pm.environment.get('noteid');",
+							"   const baseUrl = pm.environment.get('base_url');",
+							"   pm.sendRequest(`${baseUrl}/notes/${noteId}`, (error, response) => {",
+							"        pm.expect(response.code).to.equals(404);",
+							"        const responseJson = response.json();",
+							"        pm.expect(responseJson.status).to.equals('fail');",
+							"        pm.expect(responseJson.message).to.equals('Catatan tidak ditemukan');       ",
+							"   });",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/notes/{{noteid}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"notes",
+						"{{noteid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
